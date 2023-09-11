@@ -1,9 +1,12 @@
 # GENAI EVALUATION
 GenAI Evaluation is a library which contains methods to evaluate differences in Real & Synthetic Data. 
+#### Functions
+- **multivariate_ecdf**: Computes joint or multivariate ECDF in contrast to the univariate capabilities provided by packages like statsmodels
+- **ks_statistic**: Calculates the KS Statistic for two multivariate ECDFs  
 
 # Authors
-- [Dr. Vincent Granville](mailto:vincentg@mltechniques.com)
-- [Rajiv Iyer](mailto:raju.rgi@gmail.com)
+- [Dr. Vincent Granville](mailto:vincentg@mltechniques.com) - Research
+- [Rajiv Iyer](mailto:raju.rgi@gmail.com) - Development/Maintenance
 
 ## Installation
 The package can be installed with
@@ -16,7 +19,7 @@ The test can be run by cloning the repo and running:
 ```
 pytest tests
 ```
-If this does not work, the package might not currently be findable. In that case, please install it locally with:
+In case of any issues running the tests, please run them after installing the package locally:
 
 ```
 pip install -e .
@@ -26,17 +29,17 @@ pip install -e .
 
 Start by importing the class
 ```Python
-from genai_evaluation import multivariate_ecdf, ks_distance
+from genai_evaluation import multivariate_ecdf, ks_statistic
 ```
 
 Assuming we have two pandas dataframes (Real & Synthetic) and only numerical columns, we pass them to the multivariate_ecdf function which returns the computed multivariate ECDFs of both.
 ```Python
-ecdf_real, ecdf_synth = multivariate_ecdf(real_data, synthetic_data, n_nodes = 1000, verbose = True)
+query_str, ecdf_real, ecdf_synth = multivariate_ecdf(real_data, synthetic_data, n_nodes = 1000, verbose = True)
 ```
 
 We then calculate the multivariate KS Distance between the ECDFs
 ```Python
-ks_stat = ks_distance(ecdf_real, ecdf_synth)
+ks_stat = ks_statistic(ecdf_real, ecdf_synth)
 ```
 
 ## Motivation
