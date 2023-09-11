@@ -40,6 +40,6 @@ ks_stat = ks_distance(ecdf_real, ecdf_synth)
 ```
 
 ## Motivation
-The motivation for this package comes from Dr. Vincent Granville's paper [Generative AI Technology Break-through: Spectacular Performance of New Synthesizer](https://mltblog.com/3Koag20)
+The motivation for this package comes from Dr. Vincent Granville's paper [Generative AI Technology Break-through: Spectacular Performance of New Synthesizer](https://mltechniques.com/2023/08/02/generative-ai-technology-break-through-spectacular-performance-of-new-synthesizer/)
 
 If you have any tips or suggestions, please contact us on email.
