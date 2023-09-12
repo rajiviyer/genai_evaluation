@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>API Reference - GENAI Evaluation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">GENAI Evaluation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">API Reference</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href=".." class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" class="nav-link disabled">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#api-reference" class="nav-link">API Reference</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#genai_evaluation.multivariate_ecdf" class="nav-link">multivariate_ecdf</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#genai_evaluation.ks_statistic" class="nav-link">ks_statistic</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="api-reference">API Reference</h1>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="genai_evaluation.multivariate_ecdf"></a>
+  <div class="doc doc-contents first">
+  
+      <p><code>multivariate_ecdf(data_a, data_b, n_nodes = 1000, verbose = True, random_seed = None)</code></p>
+<p>Function to compute ecdf on proportion of row counts generated
+by dynamic pandas queries on a dataset.</p>
+<p>It returns a tuple of query_list and computed ECDFs of both Input Datasets.</p>
+<p>The query list is generated using the first dataset as reference. It is a list of query strings combined for each column.
+E.g. Say we have a dataframe with two columns <code>x0</code> &amp; <code>x1</code>. Then the query string will be generated as <code>x0 &lt;= z0 and x1 &lt;= z1</code>, where <code>z0</code>, <code>z1</code> calculated based on random quantiles that are uniformly distributed on [0, 1], for each feature.
+Many such query_strings are generated and their respective count proportions are calculated for getting the ECDF from both the input datasets.</p>
+<p>If we are generating ECDFs for validation/synthetic, validation/training or just real/synthetic, it is very important that the validation or real dataset is the first argument in the function since the query strings will be based on that. The tests will be very effective if run this way. </p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>data_a</code></td>
+          <td>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Pandas DataFrame</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>data_b</code></td>
+          <td>
+                <code><span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Pandas DataFrame</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>n_nodes</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>No of nodes or queries to generate.
+                    Defaults to 1000.</p>
+            </div>
+          </td>
+          <td>
+                <code>1000</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>verbose</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Flag to display progress of the operations. Defaults to True </p>
+            </div>
+          </td>
+          <td>
+                <code>True</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>random_seed</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>random seed to be set before
+                        operations. If set random seed is set using <code>np.random.seed(random_seed)</code>. Defaults to None</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>TypeError</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Throws error if Input Datasets are not Pandas DataFrames</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>List</code></td>          <td>
+                <code><span title="typing.Tuple">Tuple</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Returns Tuple of query_string &amp; computed ECDFs of both Input Datasets</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>genai_evaluation\genai_evaluation.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  9</span>
+<span class="normal"> 10</span>
+<span class="normal"> 11</span>
+<span class="normal"> 12</span>
+<span class="normal"> 13</span>
+<span class="normal"> 14</span>
+<span class="normal"> 15</span>
+<span class="normal"> 16</span>
+<span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">multivariate_ecdf</span><span class="p">(</span><span class="n">data_a</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                      <span class="n">data_b</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                      <span class="n">n_nodes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+                      <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                      <span class="n">random_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `multivariate_ecdf(data_a, data_b, n_nodes = 1000, verbose = True, random_seed = None)`</span>
+
+<span class="sd">    Function to compute ecdf on proportion of row counts generated</span>
+<span class="sd">    by dynamic pandas queries on a dataset.</span>
+
+<span class="sd">    It returns a tuple of query_list and computed ECDFs of both Input Datasets.</span>
+
+<span class="sd">    The query list is generated using the first dataset as reference. It is a list of query strings combined for each column.</span>
+<span class="sd">    E.g. Say we have a dataframe with two columns `x0` &amp; `x1`. Then the query string will be generated as `x0 &lt;= z0 and x1 &lt;= z1`, where `z0`, `z1` calculated based on random quantiles that are uniformly distributed on [0, 1], for each feature.</span>
+<span class="sd">    Many such query_strings are generated and their respective count proportions are calculated for getting the ECDF from both the input datasets.</span>
+
+<span class="sd">    If we are generating ECDFs for validation/synthetic, validation/training or just real/synthetic, it is very important that the validation or real dataset is the first argument in the function since the query strings will be based on that. The tests will be very effective if run this way. </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data_a (pd.DataFrame): Pandas DataFrame</span>
+<span class="sd">        data_b (pd.DataFrame): Pandas DataFrame</span>
+<span class="sd">        n_nodes (int, optional):No of nodes or queries to generate.</span>
+<span class="sd">                                Defaults to 1000.</span>
+<span class="sd">        verbose (bool): Flag to display progress of the operations. Defaults to True </span>
+<span class="sd">        random_seed (int, optional): random seed to be set before</span>
+<span class="sd">                                    operations. If set random seed is set using `np.random.seed(random_seed)`. Defaults to None</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: Throws error if Input Datasets are not Pandas DataFrames</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List: Returns Tuple of query_string &amp; computed ECDFs of both Input Datasets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_a</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_b</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Input Datasets should be Pandas DataFrames!!&quot;</span><span class="p">)</span>
+
+    <span class="n">eps</span> <span class="o">=</span> <span class="mf">0.0000000001</span>
+    <span class="n">query_val</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="n">data_a</span><span class="o">.</span><span class="n">columns</span>
+    <span class="n">n_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">random_seed</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_seed</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">point</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sampling ecdf, location = </span><span class="si">{</span><span class="n">point</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get random percentiles</span>
+        <span class="n">percentiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_features</span><span class="p">)</span>
+        <span class="n">percentiles</span> <span class="o">=</span> <span class="n">percentiles</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">n_features</span><span class="p">)</span>
+
+        <span class="c1"># Get the percentile values from the dataset a for each column</span>
+        <span class="n">perc_vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">eps</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">data_a</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="n">perc</span><span class="p">)</span>
+                     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">perc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">percentiles</span><span class="p">)]</span>
+
+        <span class="c1"># Create the query string combined for each column</span>
+        <span class="n">query_str</span> <span class="o">=</span> <span class="s2">&quot; and &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">features</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2"> &lt;= </span><span class="si">{</span><span class="n">perc_val</span><span class="si">}</span><span class="s2">&quot;</span>
+                                  <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">perc_val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">perc_vals</span><span class="p">)])</span>
+
+        <span class="c1"># From dataset a, get the counts of rows which</span>
+        <span class="c1"># satisfy the conditions in the query string</span>
+        <span class="n">filter_count_a</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_a</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query_str</span><span class="p">))</span>
+
+        <span class="c1"># For counts &gt; 0, create key: str of the list of perc_vals</span>
+        <span class="c1"># Append key, query_str &amp; the normalized filter count for dataset</span>
+        <span class="k">if</span> <span class="n">filter_count_a</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">perc_vals</span><span class="p">))</span>
+            <span class="n">query_val</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">query_str</span><span class="p">,</span> <span class="n">filter_count_a</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">data_a</span><span class="p">)))</span>
+
+    <span class="c1"># Sort the list based on the items (third element of each tuple)</span>
+    <span class="n">query_val</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="n">query_lst</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ecdf_a</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ecdf_b</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># for each entry in the query_val list</span>
+    <span class="c1"># Retrieve the query_str and run on both datasets to get the filter counts</span>
+    <span class="c1"># Normalize the filter count for dataset b</span>
+
+    <span class="k">for</span> <span class="n">e_val</span> <span class="ow">in</span> <span class="n">query_val</span><span class="p">:</span>
+        <span class="n">query_str</span> <span class="o">=</span> <span class="n">e_val</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">value_data_a</span> <span class="o">=</span> <span class="n">e_val</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">filter_count_b</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_b</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query_str</span><span class="p">))</span>
+        <span class="n">value_data_b</span> <span class="o">=</span> <span class="n">filter_count_b</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_b</span><span class="p">)</span>
+        <span class="n">query_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">query_str</span><span class="p">)</span>
+        <span class="n">ecdf_a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value_data_a</span><span class="p">)</span>
+        <span class="n">ecdf_b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value_data_b</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">query_lst</span><span class="p">,</span> <span class="n">ecdf_a</span><span class="p">,</span> <span class="n">ecdf_b</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div><hr />
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<a id="genai_evaluation.ks_statistic"></a>
+  <div class="doc doc-contents first">
+  
+      <p><code>ks_statistic(ecdf_a, ecdf_b)</code></p>
+<p>Calculate the KS Statistic between the two input ECDFs.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>ecdf_a</code></td>
+          <td>
+                <code><span title="typing.List">List</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>ECDF Generated through the Multivariate ECDF function</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>ecdf_a</code></td>
+          <td>
+                <code><span title="typing.List">List</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>ECDF Generated through the Multivariate ECDF function</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>float</code></td>          <td>
+                <code>float</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Returns KS Statistic</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>genai_evaluation\genai_evaluation.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ks_statistic</span><span class="p">(</span><span class="n">ecdf_a</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">ecdf_b</span><span class="p">:</span> <span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    `ks_statistic(ecdf_a, ecdf_b)`</span>
+
+<span class="sd">    Calculate the KS Statistic between the two input ECDFs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ecdf_a (List): ECDF Generated through the Multivariate ECDF function</span>
+<span class="sd">        ecdf_a (List): ECDF Generated through the Multivariate ECDF function</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Returns KS Statistic</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecdf_a</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecdf_b</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Both Input ECDFs should be of the same length!!&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecdf_a</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecdf_b</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ECDFs should not be empty!!&quot;</span><span class="p">)</span>
+
+    <span class="n">np_ecdf_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ecdf_a</span><span class="p">)</span>
+    <span class="n">np_ecdf_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ecdf_b</span><span class="p">)</span>
+
+    <span class="c1"># Compute the absolute difference between ECDFs</span>
+    <span class="n">abs_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np_ecdf_a</span> <span class="o">-</span> <span class="n">np_ecdf_b</span><span class="p">)</span>
+
+    <span class="c1"># Find the maximum absolute difference (KS statistic)</span>
+    <span class="n">ks_statistic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">abs_diff</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ks_statistic</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/jquery-3.6.0.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
