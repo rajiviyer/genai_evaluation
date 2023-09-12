@@ -1,0 +1,11 @@
+site_name: GENAI Evaluation
+
+theme:
+  name: "mkdocs"
+
+plugins:
+  - mkdocstrings
+
+nav:
+  - index.md
+  - api_reference.md

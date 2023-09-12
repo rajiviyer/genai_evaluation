@@ -1,4 +1,4 @@
-# GENAI EVALUATION
+# Getting Started
 GenAI Evaluation is a library which contains methods to evaluate differences in Real & Synthetic Data. 
 
 ## Functions

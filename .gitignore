@@ -29,7 +29,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-docs/
+docs_tmp/
 .github/
 
 # PyInstaller
