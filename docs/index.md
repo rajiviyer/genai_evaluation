@@ -1,4 +1,6 @@
 # Getting Started
+[![PyPI version](https://badge.fury.io/py/genai-evaluation.svg)](https://badge.fury.io/py/genai-evaluation)
+
 GenAI Evaluation is a library which contains methods to evaluate differences in Real & Synthetic Data. 
 
 ## Functions
