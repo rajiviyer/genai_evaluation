@@ -37,6 +37,9 @@
                             <li class="navitem active">
                                 <a href="./" class="nav-link">API Reference</a>
                             </li>
+                            <li class="navitem">
+                                <a href="../user_guide/" class="nav-link">User Guide</a>
+                            </li>
                         </ul>
 
                     <ul class="nav navbar-nav ml-auto">
@@ -46,7 +49,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" class="nav-link disabled">
+                                <a rel="next" href="../user_guide/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -86,6 +89,13 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="api-reference">API Reference</h1>
+<p><strong>multivariate_ecdf</strong>(<em>data_a, data_b, n_nodes = 1000, verbose = True, random_seed = None</em>)</p>
+<p>Function to compute ecdf on proportion of row counts generated
+by dynamic pandas queries on a dataset.</p>
+<p>It returns a tuple of query_list and computed ECDFs of both Input Datasets.</p>
+<p>The query list is generated using the first dataset as reference. It is a list of query strings combined for each column.
+E.g. Say we have a dataframe with two columns <strong><code>x0</code></strong> &amp; <strong><code>x1</code></strong>. Then the query string will be generated as <strong><code>x0 &lt;= z0 and x1 &lt;= z1</code></strong>, where <strong><code>z0</code></strong>, <strong><code>z1</code></strong> calculated based on random quantiles that are uniformly distributed on [0, 1], for each feature.
+Many such query_strings are generated and their respective count proportions are calculated for getting the ECDF from both the input datasets.</p>
 
 
 
@@ -96,14 +106,6 @@
 <a id="genai_evaluation.multivariate_ecdf"></a>
   <div class="doc doc-contents first">
   
-      <p><code>multivariate_ecdf(data_a, data_b, n_nodes = 1000, verbose = True, random_seed = None)</code></p>
-<p>Function to compute ecdf on proportion of row counts generated
-by dynamic pandas queries on a dataset.</p>
-<p>It returns a tuple of query_list and computed ECDFs of both Input Datasets.</p>
-<p>The query list is generated using the first dataset as reference. It is a list of query strings combined for each column.
-E.g. Say we have a dataframe with two columns <code>x0</code> &amp; <code>x1</code>. Then the query string will be generated as <code>x0 &lt;= z0 and x1 &lt;= z1</code>, where <code>z0</code>, <code>z1</code> calculated based on random quantiles that are uniformly distributed on [0, 1], for each feature.
-Many such query_strings are generated and their respective count proportions are calculated for getting the ECDF from both the input datasets.</p>
-<p>If we are generating ECDFs for validation/synthetic, validation/training or just real/synthetic, it is very important that the validation or real dataset is the first argument in the function since the query strings will be based on that. The tests will be very effective if run this way. </p>
 
 
 
@@ -153,7 +155,9 @@ Many such query_strings are generated and their respective count proportions are
           </td>
           <td>
             <div class="doc-md-description">
-              <p>No of nodes or queries to generate.
+              <p>Specifies the number of nodes 
+                    i.e. the query strings to be generated. 
+                    This is a hyperparameter and can be tuned.
                     Defaults to 1000.</p>
             </div>
           </td>
@@ -168,7 +172,8 @@ Many such query_strings are generated and their respective count proportions are
           </td>
           <td>
             <div class="doc-md-description">
-              <p>Flag to display progress of the operations. Defaults to True </p>
+              <p>Flag to display progress of the operations. 
+            Defaults to True </p>
             </div>
           </td>
           <td>
@@ -243,122 +248,102 @@ Many such query_strings are generated and their respective count proportions are
 
           <details class="quote">
             <summary>Source code in <code>genai_evaluation\genai_evaluation.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  9</span>
-<span class="normal"> 10</span>
-<span class="normal"> 11</span>
-<span class="normal"> 12</span>
-<span class="normal"> 13</span>
-<span class="normal"> 14</span>
-<span class="normal"> 15</span>
-<span class="normal"> 16</span>
-<span class="normal"> 17</span>
-<span class="normal"> 18</span>
-<span class="normal"> 19</span>
-<span class="normal"> 20</span>
-<span class="normal"> 21</span>
-<span class="normal"> 22</span>
-<span class="normal"> 23</span>
-<span class="normal"> 24</span>
-<span class="normal"> 25</span>
-<span class="normal"> 26</span>
-<span class="normal"> 27</span>
-<span class="normal"> 28</span>
-<span class="normal"> 29</span>
-<span class="normal"> 30</span>
-<span class="normal"> 31</span>
-<span class="normal"> 32</span>
-<span class="normal"> 33</span>
-<span class="normal"> 34</span>
-<span class="normal"> 35</span>
-<span class="normal"> 36</span>
-<span class="normal"> 37</span>
-<span class="normal"> 38</span>
-<span class="normal"> 39</span>
-<span class="normal"> 40</span>
-<span class="normal"> 41</span>
-<span class="normal"> 42</span>
-<span class="normal"> 43</span>
-<span class="normal"> 44</span>
-<span class="normal"> 45</span>
-<span class="normal"> 46</span>
-<span class="normal"> 47</span>
-<span class="normal"> 48</span>
-<span class="normal"> 49</span>
-<span class="normal"> 50</span>
-<span class="normal"> 51</span>
-<span class="normal"> 52</span>
-<span class="normal"> 53</span>
-<span class="normal"> 54</span>
-<span class="normal"> 55</span>
-<span class="normal"> 56</span>
-<span class="normal"> 57</span>
-<span class="normal"> 58</span>
-<span class="normal"> 59</span>
-<span class="normal"> 60</span>
-<span class="normal"> 61</span>
-<span class="normal"> 62</span>
-<span class="normal"> 63</span>
-<span class="normal"> 64</span>
-<span class="normal"> 65</span>
-<span class="normal"> 66</span>
-<span class="normal"> 67</span>
-<span class="normal"> 68</span>
-<span class="normal"> 69</span>
-<span class="normal"> 70</span>
-<span class="normal"> 71</span>
-<span class="normal"> 72</span>
-<span class="normal"> 73</span>
-<span class="normal"> 74</span>
-<span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">multivariate_ecdf</span><span class="p">(</span><span class="n">data_a</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">multivariate_ecdf</span><span class="p">(</span><span class="n">data_a</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                       <span class="n">data_b</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                       <span class="n">n_nodes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
                       <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                       <span class="n">random_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    `multivariate_ecdf(data_a, data_b, n_nodes = 1000, verbose = True, random_seed = None)`</span>
-
-<span class="sd">    Function to compute ecdf on proportion of row counts generated</span>
-<span class="sd">    by dynamic pandas queries on a dataset.</span>
-
-<span class="sd">    It returns a tuple of query_list and computed ECDFs of both Input Datasets.</span>
-
-<span class="sd">    The query list is generated using the first dataset as reference. It is a list of query strings combined for each column.</span>
-<span class="sd">    E.g. Say we have a dataframe with two columns `x0` &amp; `x1`. Then the query string will be generated as `x0 &lt;= z0 and x1 &lt;= z1`, where `z0`, `z1` calculated based on random quantiles that are uniformly distributed on [0, 1], for each feature.</span>
-<span class="sd">    Many such query_strings are generated and their respective count proportions are calculated for getting the ECDF from both the input datasets.</span>
-
-<span class="sd">    If we are generating ECDFs for validation/synthetic, validation/training or just real/synthetic, it is very important that the validation or real dataset is the first argument in the function since the query strings will be based on that. The tests will be very effective if run this way. </span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        data_a (pd.DataFrame): Pandas DataFrame</span>
 <span class="sd">        data_b (pd.DataFrame): Pandas DataFrame</span>
-<span class="sd">        n_nodes (int, optional):No of nodes or queries to generate.</span>
+<span class="sd">        n_nodes (int, optional):Specifies the number of nodes </span>
+<span class="sd">                                i.e. the query strings to be generated. </span>
+<span class="sd">                                This is a hyperparameter and can be tuned.</span>
 <span class="sd">                                Defaults to 1000.</span>
-<span class="sd">        verbose (bool): Flag to display progress of the operations. Defaults to True </span>
+<span class="sd">        verbose (bool): Flag to display progress of the operations. </span>
+<span class="sd">                        Defaults to True </span>
 <span class="sd">        random_seed (int, optional): random seed to be set before</span>
 <span class="sd">                                    operations. If set random seed is set using `np.random.seed(random_seed)`. Defaults to None</span>
 
@@ -431,6 +416,8 @@ Many such query_strings are generated and their respective count proportions are
   </div>
 
 </div><hr />
+<p><strong>ks_statistic</strong>(<em>ecdf_a, ecdf_b</em>)</p>
+<p>Function to calculate the KS Statistic between the two input ECDFs.</p>
 
 
 
@@ -441,8 +428,6 @@ Many such query_strings are generated and their respective count proportions are
 <a id="genai_evaluation.ks_statistic"></a>
   <div class="doc doc-contents first">
   
-      <p><code>ks_statistic(ecdf_a, ecdf_b)</code></p>
-<p>Calculate the KS Statistic between the two input ECDFs.</p>
 
 
 
@@ -490,6 +475,30 @@ Many such query_strings are generated and their respective count proportions are
 
 
 
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>ValueEror</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Throws error if the input ECDFs' are empty or their lengths are not equal</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
   <p><strong>Returns:</strong></p>
   <table>
     <thead>
@@ -514,7 +523,17 @@ Many such query_strings are generated and their respective count proportions are
 
           <details class="quote">
             <summary>Source code in <code>genai_evaluation\genai_evaluation.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">103</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
 <span class="normal">104</span>
 <span class="normal">105</span>
 <span class="normal">106</span>
@@ -531,26 +550,14 @@ Many such query_strings are generated and their respective count proportions are
 <span class="normal">117</span>
 <span class="normal">118</span>
 <span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ks_statistic</span><span class="p">(</span><span class="n">ecdf_a</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">ecdf_b</span><span class="p">:</span> <span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">120</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ks_statistic</span><span class="p">(</span><span class="n">ecdf_a</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">ecdf_b</span><span class="p">:</span> <span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    `ks_statistic(ecdf_a, ecdf_b)`</span>
-
-<span class="sd">    Calculate the KS Statistic between the two input ECDFs.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        ecdf_a (List): ECDF Generated through the Multivariate ECDF function</span>
 <span class="sd">        ecdf_a (List): ECDF Generated through the Multivariate ECDF function</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueEror: Throws error if the input ECDFs&#39; are empty or their lengths are not equal</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        float: Returns KS Statistic</span>
