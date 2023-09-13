@@ -11,19 +11,21 @@
 ```python
 import pandas as pd
 import numpy as np
+from genai_evaluation import multivariate_ecdf, ks_statistic
 
 random_seed = 42
-n_nodes = 1000
+n_nodes = 5000
 verbose = True
 
 # Simulate a real dataset
 real_data = pd.DataFrame(np.random.rand(1000, 5), columns=['x1', 'x2', 'x3', 'x4', 'x5'])
 
-training_data = real_data.sample(frac = 0.8)
+#Split real data into 50-50% training & validation dataset
+training_data = real_data.sample(frac = 0.5)
 validation_data = real_data.drop(training_data.index)
 
-# Simulate a fake dataset
-fake_data = pd.DataFrame(np.random.rand(100, 5), columns=['x1', 'x2', 'x3', 'x4', 'x5'])
+# Simulate a synthetic dataset
+synthetic_data = pd.DataFrame(np.random.rand(500, 5), columns=['x1', 'x2', 'x3', 'x4', 'x5'])
 
 # Calculate ECDFs 
 _, ecdf_val1, ecdf_synth = \
@@ -33,7 +35,7 @@ _, ecdf_val1, ecdf_synth = \
                               verbose = verbose,
                               random_seed=random_seed)
 
-_, ecdf_val2, ecdf_synth = \
+_, ecdf_val2, ecdf_train = \
             multivariate_ecdf(validation_data, 
                               training_data, 
                               n_nodes = n_nodes,
@@ -46,6 +48,5 @@ base_ks_stat = ks_statistic(ecdf_val2, ecdf_train)
 print(f"KS Stat (Synth vs Validation): {ks_stat:.5f}")
 print(f"Base KS Stat (Train vs Validation): {base_ks_stat:.5f}")
 print(f"Absolute Diff {np.abs((ks_stat-base_ks_stat)**2):.5f}")
-
 ```
 
