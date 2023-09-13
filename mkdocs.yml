@@ -9,3 +9,4 @@ plugins:
 nav:
   - index.md
   - api_reference.md
+  - user_guide.md
