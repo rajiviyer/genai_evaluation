@@ -46,6 +46,6 @@ base_ks_stat = ks_statistic(ecdf_val2, ecdf_train)
 
 print(f"KS Stat (Synth vs Validation): {ks_stat:.5f}")
 print(f"Base KS Stat (Train vs Validation): {base_ks_stat:.5f}")
-print(f"Absolute Diff {np.abs((ks_stat-base_ks_stat)**2):.5f}")
+print(f"Absolute Diff {np.abs((ks_stat-base_ks_stat)):.5f}")
 ```
 
