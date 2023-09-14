@@ -1,4 +1,4 @@
-# Getting Started
+# Home
 [![PyPI version](https://badge.fury.io/py/genai-evaluation.svg)](https://badge.fury.io/py/genai-evaluation)
 
 GenAI Evaluation is a library which contains methods to evaluate differences in Real & Synthetic Data. 
@@ -6,6 +6,8 @@ GenAI Evaluation is a library which contains methods to evaluate differences in 
 ## Functions
 - **multivariate_ecdf**: Computes joint or multivariate ECDF in contrast to the univariate capabilities provided by packages like statsmodels
 - **ks_statistic**: Calculates the KS Statistic for two multivariate ECDFs  
+
+Read more in the [API Reference](./api_reference.md) & [User Guide](./user_guide.md) pages.
 
 ## Authors
 - [Dr. Vincent Granville](mailto:vincentg@mltechniques.com) - Research
