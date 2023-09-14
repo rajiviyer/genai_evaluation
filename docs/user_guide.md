@@ -3,10 +3,9 @@
 ## Synthetic vs Real Data Evaluation
 - Typically **multivariate_ecdf** & **ks_statistic** functions are used for evaluating real & synthetic tabular data having all **numerical columns**.
 - Real data is split into training & validation data. Synthetic data is generated based on the training data and then evaluated with validation.
-- While generating ECDFs for validation/synthetic, validation/training or just real/synthetic, it is very important that the validation or real dataset is the first argument in the function since the query strings will be based on that. The tests will be very effective if we follow that approach.
-- Higher values of n_nodes can lead to better convergence i.e. smaller difference between **ks_stat** (for validation & synthetic) & **base_ks_stat** (for validation & training). But they tend to get slower since more nodes need to be generated. If ks_stat & base_ks_stat values are similar, increasing the n_nodes to 5000 gives a better performance.
-- Absolute Difference i.e. ks_diff = np.abs(ks_stat - base_ks_stat) can be a good measure
-- When comparing only real vs synthetic datasets,  `ks_symmterical = np.mean(ks(real,synth),ks(synth,real))` or `ks_symmetrical = np.max(ks(real,synth),ks(synth,real))` can be a good measure
+- When calling the ECDF function, the first argument must be the real data used to produce the synthetization, and the second argument the synthesized data . In a cross-validation setting, the first argument should be the validation data: a portion of the real data called holdout, and not used to train the synthesizer. The reason for this is that the real or validation set is used as the reference dataset. The goal is to test whether the distribution observed in the synthetization matches that in the real or validation set, not the other way around.
+- The ECDF is approximated using a number of locations in the feature space, specified by the argument n_nodes. The larger n_nodes, the better the approximation, leading to a more accurate KS_statistic. This is especially important in cross-validation when comparing the KS distance between the validation set and synthetized data, with KS_Base measuring the distance between the validation and training sets. If both distances are very similar, indicating a good synthetization, you may increase n_nodes to get a more refined evaluation. Increasing n_nodes results in more computing time.
+- For a symmetrical distance, use KS_symmetrical = max(KS_1, KS_2) with KS_1 = KS(validation, synthetic) and KS_2 = KS(synthetic, validation).You may replace validation by real or training data, if you do not perform cross-validation.  
 
 ```python
 import pandas as pd
