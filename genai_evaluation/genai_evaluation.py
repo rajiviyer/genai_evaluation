@@ -4,6 +4,7 @@
 import pandas as pd
 import numpy as np
 from typing import List, Tuple
+import re
 
 
 def multivariate_ecdf(data_a: pd.DataFrame,
@@ -25,6 +26,8 @@ def multivariate_ecdf(data_a: pd.DataFrame,
                                     operations. If set random seed is set using `np.random.seed(random_seed)`. Defaults to None
 
     Raises:
+        ValueError: Thows value error if one or more column names between both the  
+                    Input DataFrames do not match
         TypeError: Throws error if Input Datasets are not Pandas DataFrames
 
     Returns:
@@ -33,6 +36,28 @@ def multivariate_ecdf(data_a: pd.DataFrame,
 
     if not isinstance(data_a, pd.DataFrame) or not isinstance(data_b, pd.DataFrame):
         raise TypeError("Input Datasets should be Pandas DataFrames!!")
+    
+    data_a = data_a.copy()
+    data_b = data_b.copy()
+    data_a_cols = "".join(data_a.columns)
+    data_b_cols = "".join(data_b.columns)
+    
+    if not data_a_cols.isalnum():
+        if verbose:
+            print("Dataset A columns have special characters. Will be cleaned before processing!!")
+        data_a_cols_cleaned = [re.sub(r'[^a-zA-Z0-9]', '', col).lower() 
+                               for col in data_a.columns]
+        data_a.columns = data_a_cols_cleaned
+        
+    if not data_b_cols.isalnum():
+        if verbose:
+            print("Dataset B columns have special characters. Will be cleaned before processing!!")
+        data_b_cols_cleaned = [re.sub(r'[^a-zA-Z0-9]', '', col).lower() 
+                               for col in data_b.columns]
+        data_b.columns = data_b_cols_cleaned
+    
+    if not data_a.columns.equals(data_b.columns):
+        raise ValueError("One or more column names do not match in both DataFrames!!")    
 
     eps = 0.0000000001
     query_val = []

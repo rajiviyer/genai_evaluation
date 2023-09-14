@@ -3,7 +3,7 @@
 [![Documentation](https://img.shields.io/badge/Documentation-%20-blue)](https://rajiviyer.github.io/genai_evaluation/)
 
 
-GenAI Evaluation is a library which contains methods to evaluate differences in Real & Synthetic Data. 
+GenAI Evaluation is a library which contains methods to evaluate differences in Real and Synthetic Data. 
 
 ## Functions
 - **multivariate_ecdf**: Computes joint or multivariate ECDF in contrast to the univariate capabilities provided by packages like statsmodels
