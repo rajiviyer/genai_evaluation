@@ -17,5 +17,6 @@ Many such query_strings are generated and their respective count proportions are
 **ks_statistic**(*ecdf_a, ecdf_b*)
 
 Function to calculate the KS Statistic between the two input ECDFs.
+Calculates the maximum separation (distance) between the ECDFs and yields a result ranging from 0 (indicating the best fit) and 1 (indicating the worst fit).
 
 ::: genai_evaluation.ks_statistic
