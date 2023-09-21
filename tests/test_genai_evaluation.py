@@ -2,8 +2,53 @@
 
 import numpy as np
 import pytest
-from genai_evaluation import ks_statistic
+from genai_evaluation import ks_statistic, multivariate_ecdf
+import pandas as pd
 
+def test_multivariate_ecdf():
+    
+    # Dataset is a list
+    with pytest.raises(TypeError):    
+        real_data = [1,2,3,4]
+        
+        # Simulate a synthetic dataset
+        synthetic_data = pd.DataFrame(np.random.rand(100, 5), columns=['x1', 'x2', 'x3', 'x4', 'x5'])
+
+        # Calculate ECDFs 
+        _, ecdf_val1, ecdf_synth = \
+                    multivariate_ecdf(real_data, 
+                                    synthetic_data, 
+                                    n_nodes = 1000,
+                                    verbose = False,
+                                    random_seed=42)
+    # Empty Dataset
+    with pytest.raises(ValueError):    
+        real_data = pd.DataFrame()
+        
+        # Simulate a synthetic dataset
+        synthetic_data = pd.DataFrame(np.random.rand(100, 5), columns=['x1', 'x2', 'x3', 'x4', 'x5'])
+
+        # Calculate ECDFs 
+        _, ecdf_val1, ecdf_synth = \
+                    multivariate_ecdf(real_data, 
+                                    synthetic_data, 
+                                    n_nodes = 1000,
+                                    verbose = False,
+                                    random_seed=42)
+    # Column Names do not Match
+    with pytest.raises(ValueError):     
+        real_data = pd.DataFrame(np.random.rand(100, 5), columns=['x1', 'x_2', 'x3', 'x4', 'x5'])
+        
+        # Simulate a synthetic dataset
+        synthetic_data = pd.DataFrame(np.random.rand(100, 5), columns=['x1', 'x2', 'x_3', 'x4', 'x5'])
+
+        # Calculate ECDFs 
+        _, ecdf_val1, ecdf_synth = \
+                    multivariate_ecdf(real_data, 
+                                    synthetic_data, 
+                                    n_nodes = 1000,
+                                    verbose = False,
+                                    random_seed=42)                              
 
 # Define test cases
 def test_ks_statistic():

@@ -26,9 +26,11 @@ def multivariate_ecdf(data_a: pd.DataFrame,
                                     operations. If set random seed is set using `np.random.seed(random_seed)`. Defaults to None
 
     Raises:
+        TypeError: Throws error if Input Datasets are not Pandas DataFrames
+        ValueError: Throws error if any Input Dataset is empty
         ValueError: Thows value error if one or more column names between both the  
                     Input DataFrames do not match
-        TypeError: Throws error if Input Datasets are not Pandas DataFrames
+
 
     Returns:
         List: Returns Tuple of query_string & computed ECDFs of both Input Datasets
@@ -37,22 +39,23 @@ def multivariate_ecdf(data_a: pd.DataFrame,
     if not isinstance(data_a, pd.DataFrame) or not isinstance(data_b, pd.DataFrame):
         raise TypeError("Input Datasets should be Pandas DataFrames!!")
     
+    if data_a.empty or data_b.empty:
+        raise ValueError("Input Datasets should not be empty!!")
+    
     data_a = data_a.copy()
     data_b = data_b.copy()
-    data_a_cols = "".join(data_a.columns)
-    data_b_cols = "".join(data_b.columns)
     
-    if not data_a_cols.isalnum():
+    if re.search(r'[^a-zA-Z0-9_]', "".join(data_a.columns)):
         if verbose:
             print("Dataset A columns have special characters. Will be cleaned before processing!!")
-        data_a_cols_cleaned = [re.sub(r'[^a-zA-Z0-9]', '', col).lower() 
+        data_a_cols_cleaned = [re.sub(r'[^a-zA-Z0-9_]', '', col).lower() 
                                for col in data_a.columns]
         data_a.columns = data_a_cols_cleaned
         
-    if not data_b_cols.isalnum():
+    if re.search(r'[^a-zA-Z0-9_]', "".join(data_a.columns)):
         if verbose:
             print("Dataset B columns have special characters. Will be cleaned before processing!!")
-        data_b_cols_cleaned = [re.sub(r'[^a-zA-Z0-9]', '', col).lower() 
+        data_b_cols_cleaned = [re.sub(r'[^a-zA-Z0-9_]', '', col).lower() 
                                for col in data_b.columns]
         data_b.columns = data_b_cols_cleaned
     
