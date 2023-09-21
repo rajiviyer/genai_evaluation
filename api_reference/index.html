@@ -211,22 +211,32 @@ Many such query_strings are generated and their respective count proportions are
     <tbody>
         <tr>
           <td>
+                <code>TypeError</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Throws error if Input Datasets are not Pandas DataFrames</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+                <code>ValueError</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Throws error if any Input Dataset is empty</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
                 <code>ValueError</code>
           </td>
           <td>
             <div class="doc-md-description">
               <p>Thows value error if one or more column names between both the<br />
         Input DataFrames do not match</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-                <code>TypeError</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Throws error if Input Datasets are not Pandas DataFrames</p>
             </div>
           </td>
         </tr>
@@ -364,7 +374,10 @@ Many such query_strings are generated and their respective count proportions are
 <span class="normal">112</span>
 <span class="normal">113</span>
 <span class="normal">114</span>
-<span class="normal">115</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">multivariate_ecdf</span><span class="p">(</span><span class="n">data_a</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">multivariate_ecdf</span><span class="p">(</span><span class="n">data_a</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                       <span class="n">data_b</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
                       <span class="n">n_nodes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
                       <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -383,9 +396,11 @@ Many such query_strings are generated and their respective count proportions are
 <span class="sd">                                    operations. If set random seed is set using `np.random.seed(random_seed)`. Defaults to None</span>
 
 <span class="sd">    Raises:</span>
+<span class="sd">        TypeError: Throws error if Input Datasets are not Pandas DataFrames</span>
+<span class="sd">        ValueError: Throws error if any Input Dataset is empty</span>
 <span class="sd">        ValueError: Thows value error if one or more column names between both the  </span>
 <span class="sd">                    Input DataFrames do not match</span>
-<span class="sd">        TypeError: Throws error if Input Datasets are not Pandas DataFrames</span>
+
 
 <span class="sd">    Returns:</span>
 <span class="sd">        List: Returns Tuple of query_string &amp; computed ECDFs of both Input Datasets</span>
@@ -394,22 +409,23 @@ Many such query_strings are generated and their respective count proportions are
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_a</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_b</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Input Datasets should be Pandas DataFrames!!&quot;</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">data_a</span><span class="o">.</span><span class="n">empty</span> <span class="ow">or</span> <span class="n">data_b</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input Datasets should not be empty!!&quot;</span><span class="p">)</span>
+
     <span class="n">data_a</span> <span class="o">=</span> <span class="n">data_a</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">data_b</span> <span class="o">=</span> <span class="n">data_b</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">data_a_cols</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_a</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-    <span class="n">data_b_cols</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_b</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">data_a_cols</span><span class="o">.</span><span class="n">isalnum</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^a-zA-Z0-9_]&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_a</span><span class="o">.</span><span class="n">columns</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dataset A columns have special characters. Will be cleaned before processing!!&quot;</span><span class="p">)</span>
-        <span class="n">data_a_cols_cleaned</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^a-zA-Z0-9]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> 
+        <span class="n">data_a_cols_cleaned</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^a-zA-Z0-9_]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> 
                                <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data_a</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
         <span class="n">data_a</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">data_a_cols_cleaned</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">data_b_cols</span><span class="o">.</span><span class="n">isalnum</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^a-zA-Z0-9_]&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_a</span><span class="o">.</span><span class="n">columns</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dataset B columns have special characters. Will be cleaned before processing!!&quot;</span><span class="p">)</span>
-        <span class="n">data_b_cols_cleaned</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^a-zA-Z0-9]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> 
+        <span class="n">data_b_cols_cleaned</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^a-zA-Z0-9_]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> 
                                <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data_b</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
         <span class="n">data_b</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">data_b_cols_cleaned</span>
 
@@ -583,10 +599,7 @@ Calculates the maximum separation (distance) between the ECDFs and yields a resu
 
           <details class="quote">
             <summary>Source code in <code>genai_evaluation\genai_evaluation.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">121</span>
 <span class="normal">122</span>
 <span class="normal">123</span>
 <span class="normal">124</span>
@@ -610,7 +623,10 @@ Calculates the maximum separation (distance) between the ECDFs and yields a resu
 <span class="normal">142</span>
 <span class="normal">143</span>
 <span class="normal">144</span>
-<span class="normal">145</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ks_statistic</span><span class="p">(</span><span class="n">ecdf_a</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">ecdf_b</span><span class="p">:</span> <span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">ks_statistic</span><span class="p">(</span><span class="n">ecdf_a</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">ecdf_b</span><span class="p">:</span> <span class="n">List</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>
 <span class="sd">        ecdf_a (List): ECDF Generated through the Multivariate ECDF function</span>
